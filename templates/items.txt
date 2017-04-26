@@ -1,0 +1,24 @@
+%
+item name
+item id number
+brief description of item
+seller id number
+price of item
+quantity available
+item category
+%
+item name
+item id number
+brief description of item
+seller id number
+price of item
+quantity available
+item category
+%
+item name
+item id number
+brief description of item
+seller id number
+price of item
+quantity available
+item category

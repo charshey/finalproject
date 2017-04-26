@@ -1,0 +1,21 @@
+%
+order id number
+item id number
+buyer id number
+seller id number
+The LocalDateTime timestamp
+boolean Shipped
+%
+order id number
+item id number
+buyer id number
+seller id number
+The LocalDateTime timestamp
+boolean Shipped
+%
+order id number
+item id number
+buyer id number
+seller id number
+The LocalDateTime timestamp
+boolean Shipped
