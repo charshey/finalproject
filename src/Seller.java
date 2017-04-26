@@ -8,7 +8,7 @@
  * Objects of this class represent sellers within a marketplace.
  */ 
 
-public class Seller() {
+public class Seller {
 
     //the seller's name
     private String name;
