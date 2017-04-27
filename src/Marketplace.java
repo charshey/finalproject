@@ -554,7 +554,7 @@ public class Marketplace {
             System.out.println("\nInvalid input\n");
         }
       } else {
-        input.nextLine();
+	input.nextLine();
         System.out.println("\nInvalid input\n");
       }
     }
@@ -731,7 +731,8 @@ private int getUserID(String emailAddress, String password) {
       System.out.println("1. Search for items");
       System.out.println("2. Browse for items");
       System.out.println("3. See order history");
-      System.out.println("4. Logout");
+      System.out.println("4. Change account info");
+      System.out.println("5. Logout");
       System.out.println();
       System.out.print("Enter the number of the desired option: ");
       if (input.hasNextInt()) {
@@ -746,6 +747,9 @@ private int getUserID(String emailAddress, String password) {
             buyerOrderHistory(currentUser);
             break;
           case 4:
+            changeBuyerAccountInfo();
+            break;
+          case 5:
             input.close();
             System.out.println();
             return;
@@ -813,11 +817,11 @@ private int getUserID(String emailAddress, String password) {
             return;
           default:
             input.nextLine();
-            System.out.println("\ninvalid inputAAAAA");
+            System.out.println("\ninvalid input");
         }
       } else {
         input.nextLine();
-        System.out.println("\ninvalid inputBBBBB");
+        System.out.println("\ninvalid input");
       }
     }
   }
@@ -1033,6 +1037,83 @@ private int getUserID(String emailAddress, String password) {
     }
     input.close();
   }
+  
+  /**
+   * Change account information
+   */ 
+  private void changeBuyerAccountInfo() {
+    Scanner input = new Scanner(System.in);    
+    Buyer buyer = searchBuyersByID(currentUser);
+    boolean dontExitMenu = true;
+    while (dontExitMenu) {
+      System.out.println("\nChange Buyer Account Information");
+      System.out.println("--------------------------------");
+      System.out.println("1. Change name");
+      System.out.println("2. Change e-mail address");
+      System.out.println("3. Change password");
+      System.out.println("4. Return to the buyer menu");
+      System.out.print("\nEnter the number of the desired option: ");
+      if (input.hasNextInt()) {
+        switch (input.nextInt()) {
+          case 1:
+            System.out.print("\nCurrent Name: " + buyer.getName());
+            System.out.print("\nEnter new name: ");
+            input.nextLine();
+            buyer.setName(input.nextLine());
+            System.out.println("\nYour name was successfully changed.");
+            break;
+          case 2:
+            System.out.print("\nCurrent e-mail address: " + buyer.getEmailAddress());
+            System.out.print("\nEnter new e-mail address: ");
+            input.nextLine();
+            buyer.setEmailAddress(input.nextLine());
+            System.out.println("\nYour e-mail address was successfully changed.");
+            break;
+          case 3:
+            System.out.print("\nEnter new password: ");
+            input.nextLine();
+            buyer.setPassword(input.nextLine());
+            System.out.println("\nYour password was successfully changed.");
+            break;
+          case 4:
+            dontExitMenu = false;
+            break;
+          default:
+            input.nextLine();
+            System.out.println("\ninvalid input");
+        }
+      } else {
+        input.nextLine();
+        System.out.println("\ninvalid input");
+      }
+    }
+    System.out.println();
+  }
+  
+  /**
+   * Returns true if the current user is a buyer.
+   * @return true if the current user is a buyer
+   */ 
+  private boolean isCurrentUserABuyer() {
+    return (currentUser >= 10000 && currentUser <= 19999);
+  }
+  
+  /**
+   * Returns true if the current user is a seller.
+   * @return true if the current user is a seller
+   */ 
+  private boolean isCurrentUserASeller() {
+    return (currentUser >= 20000 && currentUser <= 29999);
+  }
+  
+  /**
+   * Returns true if the current user is an admin.
+   * @return true if the current user is an admin
+   */ 
+  private boolean isCurrentUserAnAdmin() {
+    return (currentUser == -2);
+  }
+  
  
   public static void main(String[] args) throws FileNotFoundException {
     Marketplace test = new Marketplace();

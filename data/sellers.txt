@@ -1,15 +1,20 @@
 %
+Bob's Books
+25000
+bob@bobsBookstore.net
+Asparagus333
+%
 Ultimate Book Supply
-334343
+20611
 orderBooks@ultimateBookSupply.com
 TooManyBooks3421
 %
 Kroger Online
-274749
+29105
 kroger@kroger.com
-sdkjfsfksdfkdjs
+doopdoop
 %
 Movie Club
-203947
+22478
 movieClub@gmail.com
-moviemoviemoviemovie77
+moviemoviemovie7

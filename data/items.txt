@@ -1,24 +1,64 @@
 %
 Java for Dummies
-99999383
+30000
 A guide to learning Java.
-334343
+25000
 15.87
 17
 Books
 %
+Green eggs and Ham
+30001
+A book for children.
+20611
+15.87
+32
+Books
+%
+The Cat in the Hat
+30002
+A book about a cat.
+20611
+15.87
+12
+Books
+%
 Back to the Future
-8847474
-This movie is a classic.
-203947
+34765
+A movie about a kid and a scientist.
+22478
 8.99
-36
+5
+Movies
+%
+Forrest Gump
+38890
+A mentally challenged man does amazing things.
+22478
+5.63
+18
 Movies
 %
 Campbells Chicken Noodle Soup
-4945858
+31664
 Chicken, noodles, carrots, and celery.
-274749
+29105
 2.75
 150
+Grocery
+%
+Wonder Bread
+38648
+It's bread. That's it.
+29105
+2.99
+47
+Grocery
+%
+Gummy Bears
+32221
+Tasty candy in bear form.
+29105
+1.57
+28
 Grocery
