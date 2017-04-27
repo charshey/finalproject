@@ -15,13 +15,13 @@ public class Order {
   private int orderID;
   
   //the item that was bought
-  private Item item;
+  private int itemID;
   
   //the buyer who bought the item
-  private Buyer buyer;
+  private int buyerID;
   
   //the seller who sold the item
-  private Seller seller;
+  private int sellerID;
   
   //specifies whether the item has been shipped
   private boolean shipped;
@@ -33,18 +33,17 @@ public class Order {
   /**
    * Constructs a new Order that will have the given order id number, item,
    * buyer, seller, and shipping status.
-   * @param orderID the order id number
-   * @param item the item that was bought
-   * @param buyer the person who made the order
-   * @param seller the person who is selling the item
+   * @param itemID the ID of the item that was bought
+   * @param buyerID the ID of the person who made the order
+   * @param sellerID the ID of the person who is selling the item
    * @param shipped whether the item has been shipped or not
    */ 
-  public Order(int orderID, Item item, Buyer buyer,
-               Seller seller, boolean shipped) {
-    this.orderID = orderID;
-    this.item = item;
-    this.buyer = buyer;
-    this.seller = seller;
+  public Order(int itemID, int buyerID,
+               int sellerID, boolean shipped) {
+    this.orderID = 0;
+    this.itemID = itemID;
+    this.buyerID = buyerID;
+    this.sellerID = sellerID;
     this.shipped = shipped;
   }
   
@@ -74,51 +73,51 @@ public class Order {
   }
   
   /**
-   * Returns this order's item.
-   * @return this order's item
+   * Returns this order's item ID.
+   * @return this order's itemID
    */ 
-  public Item getItem() {
-    return item;
+  public int getItem() {
+    return itemID;
   }
   
   /**
-   * Sets this order's item.
-   * @param item this order's item
+   * Sets this order's item ID.
+   * @param itemID this order's itemID
    */ 
-  public void setItem(Item item) {
-    this.item = item;
+  public void setItem(int itemID) {
+    this.itemID = itemID;
   }
   
   /**
-   * Returns this order's buyer.
-   * @return this order's buyer
+   * Returns this order's buyer ID.
+   * @return this order's buyer ID
    */ 
-  public Buyer getBuyer() {
-    return buyer;
+  public int getBuyer() {
+    return buyerID;
   }
   
   /**
-   * Sets this order's buyer.
-   * @param buyer a buyer
+   * Sets this order's buyer ID.
+   * @param buyerID this order's buyerID
    */ 
-  public void setBuyer(Buyer buyer) {
-    this.buyer = buyer;
+  public void setBuyer(int buyerID) {
+    this.buyerID = buyerID;
   }
   
   /**
-   * Returns this order's seller.
-   * @return this order's seller
+   * Returns this order's sellerID.
+   * @return this order's sellerID
    */ 
-  public Seller getSeller() {
-    return seller;
+  public int getSeller() {
+    return sellerID;
   }
   
   /**
    * Sets this order's seller.
-   * @param seller a seller
+   * @param sellerID a seller ID
    */ 
-  public void setSeller(Seller seller) {
-    this.seller = seller;
+  public void setSeller(int sellerID) {
+    this.sellerID = sellerID;
   }
   
   /**

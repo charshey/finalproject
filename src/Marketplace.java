@@ -73,7 +73,7 @@ public class Marketplace {
    *         and cannot be created
    */ 
   private void writeBuyers() throws FileNotFoundException {
-    PrintWriter out = new PrintWriter("data/buyers.txt");
+    PrintWriter out = new PrintWriter("../data/buyers.txt");
     for (Buyer b : buyers) {
       out.println("%");
       out.println(b.getName());
@@ -90,7 +90,7 @@ public class Marketplace {
    *         cannot be created
    */ 
   private void writeSellers() throws FileNotFoundException {
-    PrintWriter out = new PrintWriter("data/sellers.txt");
+    PrintWriter out = new PrintWriter("../data/sellers.txt");
     for (Seller s : sellers) {
       out.println("%");
       out.println(s.getName());
@@ -107,7 +107,7 @@ public class Marketplace {
    *         cannot be created
    */ 
   private void writeCategories() throws FileNotFoundException {
-    PrintWriter out = new PrintWriter("data/categories.txt");
+    PrintWriter out = new PrintWriter("../data/categories.txt");
     for (String c : categories) {
       out.println("%");
       out.println(c);
@@ -121,7 +121,7 @@ public class Marketplace {
    *         cannot be created
    */
   private void writeItems() throws FileNotFoundException {
-    PrintWriter out = new PrintWriter("data/items.txt");
+    PrintWriter out = new PrintWriter("../data/items.txt");
     for (Item e : items) {
       out.println("%");
       out.println(e.getName());
@@ -141,13 +141,13 @@ public class Marketplace {
    *         cannot be created
    */
   private void writeOrders() throws FileNotFoundException {
-    PrintWriter out = new PrintWriter("data/orders.txt");
+    PrintWriter out = new PrintWriter("../data/orders.txt");
     for (Order o : orders) {
       out.println("%");
       out.println(o.getID());
-      out.println(o.getItem().getID());
-      out.println(o.getBuyer().getID());
-      out.println(o.getSeller().getID());
+      out.println(o.getItem());
+      out.println(o.getBuyer());
+      out.println(o.getSeller());
       out.println(o.getDateAndTime());
       out.println(o.getShipped());
     }
@@ -160,7 +160,7 @@ public class Marketplace {
    *         cannot be created
    */
   private void writeAdmin() throws FileNotFoundException {
-    PrintWriter out = new PrintWriter("data/admin.txt");
+    PrintWriter out = new PrintWriter("../data/admin.txt");
     out.println(adminName);
     out.print(adminPassword);
     out.close();
@@ -183,7 +183,7 @@ public class Marketplace {
    * @throws FileNotFoundException if the buyers.txt file is not found
    */ 
   private void loadBuyers() throws FileNotFoundException {
-    Scanner input = new Scanner(new File("data/buyers.txt"));
+    Scanner input = new Scanner(new File("../data/buyers.txt"));
     while (input.hasNextLine() && input.nextLine().equals("%")) {
       Buyer temp = new Buyer();
       temp.setName(input.nextLine());
@@ -200,7 +200,7 @@ public class Marketplace {
    * @throws FileNotFoundException if the sellers.txt file is not found
    */ 
   private void loadSellers() throws FileNotFoundException {
-    Scanner input = new Scanner(new File("data/sellers.txt"));
+    Scanner input = new Scanner(new File("../data/sellers.txt"));
     while (input.hasNextLine() && input.nextLine().equals("%")) {
       Seller temp = new Seller();
       temp.setName(input.nextLine());
@@ -217,7 +217,7 @@ public class Marketplace {
    * @throws FileNotFoundException if the categories.txt file is not found
    */ 
   private void loadCategories() throws FileNotFoundException {
-    Scanner input = new Scanner(new File("data/categories.txt"));
+    Scanner input = new Scanner(new File("../data/categories.txt"));
     while (input.hasNextLine() && input.nextLine().equals("%")) {
       categories.add(input.nextLine());
     }
@@ -229,7 +229,7 @@ public class Marketplace {
    * @throws FileNotFoundException if the items.txt file is not found
    */ 
   private void loadItems() throws FileNotFoundException {
-    Scanner input = new Scanner(new File("data/items.txt"));
+    Scanner input = new Scanner(new File("../data/items.txt"));
     while (input.hasNextLine() && input.nextLine().equals("%")) {
       Item temp = new Item();
       temp.setName(input.nextLine());
@@ -249,7 +249,7 @@ public class Marketplace {
    * @throws FileNotFoundException if the orders.txt file is not found
    */ 
   private void loadOrders() throws FileNotFoundException {
-    Scanner input = new Scanner(new File("data/orders.txt"));
+    Scanner input = new Scanner(new File("../data/orders.txt"));
     while (input.hasNextLine() && input.nextLine().equals("%")) {
       Order temp = new Order();
       int orderID = Integer.parseInt(input.nextLine());
@@ -259,9 +259,9 @@ public class Marketplace {
       LocalDateTime dateAndTime = (LocalDateTime.parse(input.nextLine()));
       boolean shippedStatus = Boolean.parseBoolean(input.nextLine());
       temp.setID(orderID);
-      temp.setItem(searchItemsByID(itemID));
-      temp.setBuyer(searchBuyersByID(buyerID));
-      temp.setSeller(searchSellersByID(sellerID));
+      temp.setItem(itemID);
+      temp.setBuyer(buyerID);
+      temp.setSeller(sellerID);
       temp.setDateAndTime(dateAndTime);
       temp.setShipped(shippedStatus);
       orders.add(temp);
@@ -274,7 +274,7 @@ public class Marketplace {
    * @throws FileNotFoundException if the admin.txt file is not found
    */ 
   private void loadAdmin() throws FileNotFoundException {
-    Scanner input = new Scanner(new File("data/admin.txt"));
+    Scanner input = new Scanner(new File("../data/admin.txt"));
     adminName = input.nextLine();
     adminPassword = input.nextLine();
   }
@@ -405,7 +405,7 @@ public class Marketplace {
     ArrayList<Order> matchingOrders = new ArrayList<Order>();
     int id = seller.getID();
     for (Order o : orders) {
-      if (o.getSeller().getID() == id) {
+      if (o.getSeller() == id) {
         matchingOrders.add(o);
       }
     }
@@ -421,7 +421,7 @@ public class Marketplace {
     ArrayList<Order> matchingOrders = new ArrayList<Order>();
     int id = buyer.getID();
     for (Order o : orders) {
-      if (o.getBuyer().getID() == id) {
+      if (o.getBuyer() == id) {
         matchingOrders.add(o);
       }
     }
@@ -503,9 +503,9 @@ public class Marketplace {
     
     for (Order o : test.orders) {
       System.out.println("ID: " + o.getID());
-      System.out.println("Seller: " + o.getSeller().getName());
-      System.out.println("Buyer: " + o.getBuyer().getName());
-      System.out.println("Item: " + o.getItem().getName());
+      System.out.println("Seller: " + test.searchSellersByID(o.getSeller()).getName());
+      System.out.println("Buyer: " + test.searchBuyersByID(o.getBuyer()).getName());
+      System.out.println("Item: " + test.searchItemsByID(o.getItem()).getName());
       System.out.println("DateAndTime: " + o.getDateAndTime());
       System.out.println("Shipped: " + o.getShipped());
       System.out.println();

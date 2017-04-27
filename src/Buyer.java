@@ -125,12 +125,11 @@ public class Buyer {
 
     /**
      * Buys an item from the marketplace.
-     * @param item the item that the buyer is buying
+     * @param item the item to be purchased
      * @return new order
      */ 
-
     public Order buy(Item item) {
-        return new Order(item,buyerID,item.getSellerID,false);
+        return new Order(item.getID(),buyerID,item.getSellerID(),false);
     }
 
 }
