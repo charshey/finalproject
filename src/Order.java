@@ -76,7 +76,7 @@ public class Order {
    * Returns this order's item ID.
    * @return this order's itemID
    */ 
-  public int getItem() {
+  public int getItemID() {
     return itemID;
   }
   
@@ -92,7 +92,7 @@ public class Order {
    * Returns this order's buyer ID.
    * @return this order's buyer ID
    */ 
-  public int getBuyer() {
+  public int getBuyerID() {
     return buyerID;
   }
   
@@ -100,7 +100,7 @@ public class Order {
    * Sets this order's buyer ID.
    * @param buyerID this order's buyerID
    */ 
-  public void setBuyer(int buyerID) {
+  public void setBuyerID(int buyerID) {
     this.buyerID = buyerID;
   }
   
@@ -108,7 +108,7 @@ public class Order {
    * Returns this order's sellerID.
    * @return this order's sellerID
    */ 
-  public int getSeller() {
+  public int getSellerID() {
     return sellerID;
   }
   
@@ -116,7 +116,7 @@ public class Order {
    * Sets this order's seller.
    * @param sellerID a seller ID
    */ 
-  public void setSeller(int sellerID) {
+  public void setSellerID(int sellerID) {
     this.sellerID = sellerID;
   }
   
