@@ -1,0 +1,20 @@
+%
+John Doe
+928384
+JohnD@whatever.com
+spacepotato
+%
+Sarah Henderson
+565849
+SHenderson@iub.edu
+catz
+%
+Andrew Gomez
+101013
+AndrewG@gmail.com
+this is my password
+%
+Jennifer Broglan
+38474
+JennB@gmail.com
+blahblahblah34

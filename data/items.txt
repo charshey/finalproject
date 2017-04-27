@@ -1,0 +1,24 @@
+%
+Java for Dummies
+99999383
+A guide to learning Java.
+334343
+15.87
+17
+Books
+%
+Back to the Future
+8847474
+This movie is a classic.
+203947
+8.99
+36
+Movies
+%
+Campbells Chicken Noodle Soup
+4945858
+Chicken, noodles, carrots, and celery.
+274749
+2.75
+150
+Grocery

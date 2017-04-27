@@ -1,0 +1,8 @@
+%
+Books
+%
+Movies
+%
+Grocery
+%
+Clothing
