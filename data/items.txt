@@ -62,3 +62,35 @@ Tasty candy in bear form.
 1.57
 28
 Grocery
+%
+The Hitchhiker's Guide to the Galaxy
+32886
+A classic sci-fi comedy.
+29484
+5.99
+20
+Books
+%
+Teacup Pigs 2017 Calendar
+32381
+A calendar full of cute pigs.
+29484
+7.89
+34
+Office Supplies
+%
+No, don't chew that!: A training manual for new dog owners
+31561
+An essential for any puppy parent.
+29484
+11.99
+9
+Books
+%
+All Your Favorite Bands
+33010
+Rock album by Dawes.
+29484
+21.35
+12
+Vinyl

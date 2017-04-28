@@ -460,6 +460,21 @@ public class Marketplace {
     }
     return outOfStockItems;
   }
+
+  /** 
+   * Returns all of the orders that have not been shipped.
+   * @param user ID
+   * @return an array list containing that seller's unshipped orders.
+   */
+  public ArrayList<Order> checkUnshippedOrders(Seller seller) {
+    ArrayList<Order> unshippedOrders = obtainSellerOrders(seller);
+    for(int i = 0; i < unshippedOrders.size(); i++){
+      if(unshippedOrders.get(i).getShipped()){
+        unshippedOrders.remove(i);
+      }
+    }
+    return unshippedOrders;
+  }
   
   /**
    * Returns all of the orders made between the given beginning date-time and
@@ -736,7 +751,7 @@ private int getUserID(String emailAddress, String password) {
   private void adminMenu() {
     Scanner input = new Scanner(System.in);
     while (true) {
-      System.out.println("Admin Menu");
+      System.out.println("Hello, marketplace administrator!");
       System.out.println("----------");
       System.out.println("1. Access seller information ");
       System.out.println("2. Access buyer information");
@@ -764,7 +779,7 @@ private int getUserID(String emailAddress, String password) {
             showSalesHistoryMenu();
             break;
           case 6:
-            input.close();
+            //input.close();
             System.out.println();
             return;
           default:
@@ -960,9 +975,10 @@ private int getUserID(String emailAddress, String password) {
    */ 
   private void buyerMenu() {
     Scanner input = new Scanner(System.in);
+    System.out.println("Hello, " + searchBuyersByID(currentUser).getName() + "!");
     displayShippedItems();
     while (true) {
-      System.out.println("Buyer Menu");
+      
       System.out.println("----------");
       System.out.println("1. Search for items");
       System.out.println("2. Browse for items");
@@ -1039,6 +1055,7 @@ private int getUserID(String emailAddress, String password) {
    */ 
   private void sellerMenu() {
    Scanner input = new Scanner(System.in);
+   System.out.println("Hello, " + searchSellersByID(currentUser).getName() + "!\n");
    if(checkOutOfStock(searchSellersByID(currentUser)).size() > 0){
      System.out.println("The following items in your inventory are out of stock:");
      for(Item i : checkOutOfStock(searchSellersByID(currentUser))){
@@ -1046,12 +1063,18 @@ private int getUserID(String emailAddress, String password) {
      }
      System.out.println();
    }
+   if(checkUnshippedOrders(searchSellersByID(currentUser)).size() > 0){
+     System.out.println("The following orders are waiting to be shipped:");
+     for(Order o : checkUnshippedOrders(searchSellersByID(currentUser))){
+	  System.out.println("Order #" + o.getID());
+     }
+     System.out.println();
+   }
     while (true) {
-      System.out.println("Seller Menu");
       System.out.println("-----------");
       System.out.println("1. Add item(s) to marketplace");
       System.out.println("2. Remove item from marketplace");
-      System.out.println("3. Update an item's information");
+      System.out.println("3. Update or restock an item");
       System.out.println("4. Update the status of an order");
       System.out.println("5. Change your account information");
       System.out.println("6. Logout");
@@ -1232,9 +1255,9 @@ private int getUserID(String emailAddress, String password) {
       while (fileScanner.hasNextLine() && fileScanner.nextLine().equals("%")) {
         Item temp = new Item();
         temp.setName(fileScanner.nextLine());
-        temp.setID(Integer.parseInt(fileScanner.nextLine()));
+        temp.setID(generateItemID());
         temp.setDescription(fileScanner.nextLine());
-        temp.setSellerID(Integer.parseInt(fileScanner.nextLine()));
+        temp.setSellerID(currentUser);
         temp.setPrice(fileScanner.nextLine());
         temp.setQuantity(Integer.parseInt(fileScanner.nextLine()));
         temp.setCategory(fileScanner.nextLine());
@@ -1418,10 +1441,16 @@ private int getUserID(String emailAddress, String password) {
       System.out.print("-");
     }
     System.out.println();
-    printItems(itemList);
-    Item item = selectAnItem(itemList);
-    System.out.println();
-    itemPage(item);
+    if(itemList.size() > 0){
+	printItems(itemList);
+    	Item item = selectAnItem(itemList);
+    	System.out.println();
+    	itemPage(item);
+    }
+    else{
+	System.out.println("Sorry, there are no items in this category yet.\n");
+	buyerMenu();
+    }
   }
   
   /**
