@@ -101,7 +101,7 @@ public class Marketplace {
       out.println(s.getName());
       out.println(s.getID());
       out.println(s.getEmailAddress());
-      out.print(s.getPassword());
+      out.println(s.getPassword());
     }
     out.close();
   }
@@ -155,6 +155,7 @@ public class Marketplace {
       out.println(o.getSellerID());
       out.println(o.getDateAndTime());
       out.println(o.getShipped());
+      out.println(o.getShippingDate());
     }
     out.close();
   }
@@ -181,6 +182,7 @@ public class Marketplace {
     loadCategories();
     loadItems();
     loadAdmin();
+    loadOrders();
   }
   
   /**
@@ -261,14 +263,20 @@ public class Marketplace {
       int itemID = Integer.parseInt(input.nextLine());
       int buyerID = Integer.parseInt(input.nextLine());
       int sellerID = Integer.parseInt(input.nextLine());
-      LocalDateTime dateAndTime = (LocalDateTime.parse(input.nextLine()));
+      LocalDateTime dateAndTime = LocalDateTime.parse(input.nextLine());
       boolean shippedStatus = Boolean.parseBoolean(input.nextLine());
+      LocalDateTime shippingDate = null;
+      String shipDate = input.nextLine();
+      if (!(shipDate.equals("null"))) {
+        shippingDate = LocalDateTime.parse(shipDate);
+      }
       temp.setID(orderID);
       temp.setItem(itemID);
       temp.setBuyerID(buyerID);
       temp.setSellerID(sellerID);
       temp.setDateAndTime(dateAndTime);
       temp.setShipped(shippedStatus);
+      temp.setShippingDate(shippingDate);
       orders.add(temp);
     }
     input.close();
@@ -466,7 +474,6 @@ public class Marketplace {
       throw new IllegalArgumentException("beginning date-time is after " +
                                          "ending date-time");
     }
-    
     ArrayList<Order> matchingOrders = new ArrayList<Order>();
     for (Order o : orders) {
       LocalDateTime dateAndTime = o.getDateAndTime();
@@ -527,6 +534,7 @@ public class Marketplace {
   
   /**
    * The main menu of the program.
+   * @throws FileNotFoundException
    */ 
   private void mainMenu() throws FileNotFoundException {
     Scanner input = new Scanner(System.in);
@@ -551,10 +559,11 @@ public class Marketplace {
             dontExitMenu = false;
             break;
           default:
+            input.nextLine();
             System.out.println("\nInvalid input\n");
         }
       } else {
-	input.nextLine();
+        input.nextLine();
         System.out.println("\nInvalid input\n");
       }
     }
@@ -596,12 +605,14 @@ public class Marketplace {
     input.close();
     currentUser = id;
     if (id == -2) {
-      //adminMenu();
+      System.out.println();
+      adminMenu();
     } else if (id >= 10000 && id < 20000) {
       System.out.println();
       buyerMenu();
     } else if (id >= 20000 && id < 30000) {
-      //sellerMenu();
+      System.out.println();
+      sellerMenu();
     }
   }
   
@@ -654,6 +665,7 @@ private int getUserID(String emailAddress, String password) {
             dontExitLoop = false;
             break;
           default:
+            input.nextLine();
             System.out.println("\nInvalid input.");
         }
       } else {
@@ -688,7 +700,8 @@ private int getUserID(String emailAddress, String password) {
       System.out.println();
       buyerMenu();
     } else if (id >= 20000 && id < 30000) {
-      //sellerMenu();
+      System.out.println();
+      sellerMenu();
     }
     input.close();
   }
@@ -706,25 +719,248 @@ private int getUserID(String emailAddress, String password) {
         return true;
       }
     }
-    
     for (Seller s : sellers) {
       if (s.getEmailAddress().equals(emailAddress)) {
         return true;
       }
     }
-    
     if (emailAddress.equals(adminName)) {
       return true;
     }
     return false;
   }
   
+  /**
+   * The admin menu.
+   */ 
+  private void adminMenu() {
+    Scanner input = new Scanner(System.in);
+    while (true) {
+      System.out.println("Admin Menu");
+      System.out.println("----------");
+      System.out.println("1. Access seller information ");
+      System.out.println("2. Access buyer information");
+      System.out.println("3. Add item category");
+      System.out.println("4. Remove item category");
+      System.out.println("5. Show sales history");
+      System.out.println("6. Logout");
+      System.out.println();
+      System.out.print("Enter the number of the desired option: ");
+      if (input.hasNextInt()) {
+        switch (input.nextInt()) {
+          case 1:
+            accessSellerInfoMenu();
+            break;
+          case 2:
+            accessBuyerInfoMenu();
+            break;
+          case 3:
+            addCategory();
+            break;
+          case 4:
+            removeCategory();
+            break;
+          case 5:
+            showSalesHistoryMenu();
+            break;
+          case 6:
+            input.close();
+            System.out.println();
+            return;
+          default:
+            input.nextLine();
+            System.out.println("\ninvalid input\n");
+        }
+      } else {
+        input.nextLine();
+        System.out.println("\ninvalid input\n");
+      }
+    }
+  }
+  
+  /**
+   * Prompts the administrator to select the time period for displaying orders.
+   */
+  private void showSalesHistoryMenu() {
+    Scanner input = new Scanner(System.in);
+    while (true) {
+      System.out.println("\nDisplay all sales within: ");
+      System.out.println("1. Past day");
+      System.out.println("2. Past month");
+      System.out.println("3. Past year");
+      System.out.println("4. All time");
+      System.out.println();
+      System.out.print("Enter a number: ");
+      if (input.hasNextInt()) {
+        switch (input.nextInt()) {
+          case 1:
+            displayOrders(1);
+            input.close();
+            return;
+          case 2:
+            displayOrders(30);
+            input.close();
+            return;
+          case 3:
+            displayOrders(365);
+            input.close();
+            return;
+          case 4:
+            displayOrders(10000);
+            input.close();
+            return;
+          default:
+            input.nextLine();
+            System.out.println("\ninvalid input");
+        }
+      } else {
+        input.nextLine();
+        System.out.println("\ninvalid input");
+      }
+    }
+  }
+  
+  /**
+   * Prints out a list of the orders made within given number of days.
+   * @param daysAgo the number of days ago.
+   */
+  private void displayOrders(int daysAgo) {
+      LocalDateTime currentDate = LocalDateTime.now();
+      LocalDateTime previousDate = currentDate.minusDays(daysAgo);
+      ArrayList<Order> recentOrders = new ArrayList<>();
+      for (Order o : orders) {
+        if (o.getDateAndTime().isAfter(previousDate)) {
+          recentOrders.add(o);
+        }
+      }
+      if (recentOrders.isEmpty()) {
+        System.out.println("\nNo orders were made within the selected date.\n");
+        return;
+      } else {
+        System.out.println("\nThe following orders were " +
+                           "made within the selected date:");
+        printOrders(recentOrders);
+    }
+  }
+  
+  /**
+   * The administrator uses this method to access seller information.
+   */ 
+  private void accessSellerInfoMenu() {
+    Scanner input = new Scanner(System.in);
+    System.out.println("\nChoose a seller from the list below.");
+    printSellers(sellers);
+    Seller seller = selectFromList(sellers);
+    System.out.println();
+    while (true) {
+      System.out.println("Access Seller Information");
+      System.out.println("-------------------------");
+      System.out.println("Seller: " + seller.getName());
+      System.out.println("1. Access this seller's account information");
+      System.out.println("2. Access this seller's items");
+      System.out.println("3. Access this seller's orders");
+      System.out.println("4. Return to previous menu");
+      System.out.println();
+      System.out.print("Enter number: ");
+      if (input.hasNextInt()) {
+        switch (input.nextInt()) {
+          case 1:
+            changeSellerAccountInfo(seller.getID());
+            break;
+          case 2:
+            updateItemInfo(seller.getID());
+            break;
+          case 3:
+            updateOrderStatus(seller.getID());
+            break;
+          case 4:
+            input.close();
+            System.out.println();
+            return;
+          default:
+            input.nextLine();
+            System.out.println("\ninvalid input\n");
+        }
+      } else {
+        input.nextLine();
+        System.out.println("\ninvalid input\n");
+      }
+    }
+  }
+  
+  /**
+   * The administrator uses this method to access buyer information.
+   */ 
+  private void accessBuyerInfoMenu() {
+    Scanner input = new Scanner(System.in);
+    System.out.println("\nChoose a Buyer from the list below.");
+    printBuyers(buyers);
+    Buyer buyer = selectFromList(buyers);
+    System.out.println();
+    while (true) {
+      System.out.println("Access Buyer Information");
+      System.out.println("------------------------");
+      System.out.println("Buyer: " + buyer.getName());
+      System.out.println("1. Access this buyer's account information");
+      System.out.println("2. See this buyer's order history");
+      System.out.println("3. Return to previous menu");
+      System.out.println();
+      System.out.print("Enter number: ");
+      if (input.hasNextInt()) {
+        switch (input.nextInt()) {
+          case 1:
+            changeBuyerAccountInfo(buyer.getID());
+            break;
+          case 2:
+            buyerOrderHistory(buyer.getID());
+            break;
+          case 3:
+            input.close();
+            System.out.println();
+            return;
+          default:
+            input.nextLine();
+            System.out.println("\ninvalid input\n");
+        }
+      } else {
+        input.nextLine();
+        System.out.println("\ninvalid input\n");
+      }
+    }
+  }
+  
+  /**
+   * Prompts the administrator to add a category to the marketplace.
+   */ 
+  private void addCategory() {
+    Scanner input = new Scanner(System.in);
+    System.out.print("\nEnter the category name to add to the marketplace: ");
+    String category = input.nextLine();
+      while (category.equals("")) {
+        System.out.println("\nInvalid input. A category must have a name.");
+        System.out.print("\nEnter the category name to add to the marketplace: ");
+        category = input.nextLine();
+      }
+    categories.add(category);
+    System.out.println("\nThe category was added to the marketplace.\n");
+  }
+  
+  /**
+   * Prompts the administrator to remove a category from the marketplace.
+   */ 
+  private void removeCategory() {
+    System.out.println("\nChoose one of the following categories to remove:");
+    String category = selectACategory();
+    categories.remove(category);
+    System.out.println("\nThe category was removed from the marketplace.\n");
+  }
   
   /**
    * The buyer menu.
    */ 
   private void buyerMenu() {
     Scanner input = new Scanner(System.in);
+    displayShippedItems();
     while (true) {
       System.out.println("Buyer Menu");
       System.out.println("----------");
@@ -747,7 +983,7 @@ private int getUserID(String emailAddress, String password) {
             buyerOrderHistory(currentUser);
             break;
           case 4:
-            changeBuyerAccountInfo();
+            changeBuyerAccountInfo(currentUser);
             break;
           case 5:
             input.close();
@@ -763,6 +999,345 @@ private int getUserID(String emailAddress, String password) {
       }
     }
   }
+  
+  /**
+   * Prints a list of items that were shipped within the past two days.
+   */ 
+  private void displayShippedItems()  {
+    Buyer buyer = searchBuyersByID(currentUser);
+    ArrayList<Order> orderList = obtainBuyerOrders(buyer);
+    LocalDateTime currentDate = LocalDateTime.now();
+    LocalDateTime twoDaysAgo = currentDate.minusDays(2);
+    ArrayList<Order> recentOrders = new ArrayList<>();
+    for (Order o : orderList) {
+      if (o.getShipped()) {
+        if (o.getShippingDate().isAfter(twoDaysAgo)) {
+          recentOrders.add(o);
+        }
+      }
+    }
+    if (recentOrders.isEmpty()) {
+      return;
+    } else {
+      System.out.println("The following orders were recently shipped:");
+      for (int i = 0; i < recentOrders.size(); i++) {
+        Order o = recentOrders.get(i);
+        Item item = searchItemsByID(o.getItemID());
+        System.out.println("\tItem: " + item.getName());
+        System.out.println("\tOrder Number: " + o.getID());
+        if (i != (recentOrders.size() - 1)) {
+          System.out.println();
+        }
+      }
+      System.out.println();
+    }
+  }
+  
+    
+  /**
+   * Seller Menu
+   */ 
+  private void sellerMenu() {
+   Scanner input = new Scanner(System.in);
+   if(checkOutOfStock(searchSellersByID(currentUser)).size() > 0){
+     System.out.println("The following items in your inventory are out of stock:");
+     for(Item i : checkOutOfStock(searchSellersByID(currentUser))){
+	  System.out.println(i.getID() + ": " + i.getName());
+     }
+     System.out.println();
+   }
+    while (true) {
+      System.out.println("Seller Menu");
+      System.out.println("-----------");
+      System.out.println("1. Add item(s) to marketplace");
+      System.out.println("2. Remove item from marketplace");
+      System.out.println("3. Update an item's information");
+      System.out.println("4. Update the status of an order");
+      System.out.println("5. Change your account information");
+      System.out.println("6. Logout");
+      System.out.println();
+      System.out.print("Enter the number of the desired option: ");
+      if (input.hasNextInt()) {
+        switch (input.nextInt()) {
+          case 1:
+            addItemsMenu();
+            break;
+          case 2:
+            removeItemMenu();
+            break;
+          case 3:
+            updateItemInfo(currentUser);
+            break;
+          case 4:
+            updateOrderStatus(currentUser);
+            break;
+          case 5:
+            changeSellerAccountInfo(currentUser);
+            break;
+          case 6:
+            input.close();
+            System.out.println();
+            return;
+          default:
+            input.nextLine();
+            System.out.println("\ninvalid input\n");
+        }
+      } else {
+        input.nextLine();
+        System.out.println("\ninvalid input\n");
+      }
+    }
+  }
+  
+  /**
+   * Displays a list of orders by the seller with the given seller ID, and then
+   * prompts the user to select and update one of the orders.
+   */ 
+  private void updateOrderStatus(int sellerID) {
+    Seller seller = searchSellersByID(sellerID);
+    ArrayList<Order> orderList = obtainSellerOrders(seller);
+    if (orderList.isEmpty()) {
+      System.out.println("\nThere are no orders to update.\n");
+      return;
+    }
+    Scanner input = new Scanner(System.in);
+    System.out.println("\nOrders");
+    System.out.println("------");
+    printOrders(orderList);
+    Order order = selectAnOrder(orderList);
+    if (order.getShipped()) {
+      System.out.println("\nThe order has already been shipped.\n");
+      input.close();
+      return;
+    }
+    System.out.print("Change order status to shipped? Enter y or n: ");
+    String choice = input.nextLine();
+    while (!choice.equals("y") && !choice.equals("n")) {
+      System.out.print("\nPlease enter either y or n: ");
+      choice = input.nextLine();
+    }
+    if (choice.equals("y")) {
+      order.setShipped(true);
+      order.setShippingDate(LocalDateTime.now());
+      System.out.println("\nThe order status was successfully updated");
+    }
+    System.out.println();
+    input.close();
+    return;
+  }
+  
+    
+    /**
+     * Displays a prompt for a seller to an item or multiple items to the
+     * marketplace.
+     */ 
+    private void addItemsMenu() {
+      Scanner input = new Scanner(System.in);
+      while (true) {
+        System.out.println("\nAdd items");
+        System.out.println("---------");
+        System.out.println("1. Add a single item");
+        System.out.println("2. Add multiple items from a file");
+        System.out.println("3. Return to previous menu");
+        System.out.print("\nEnter the number of the desired option: ");
+        if (input.hasNextInt()) {
+          switch (input.nextInt()) {
+            case 1:
+              addSingleItem();
+              break;
+            case 2:
+              addItemsFromFile();
+              break;
+            case 3:
+              input.close();
+              System.out.println();
+              return;
+            default:
+              input.nextLine();
+              System.out.println("\ninvalid input");
+          }
+        } else {
+          input.nextLine();
+          System.out.println("\ninvalid input");
+        }
+      }
+    }
+    
+    /**
+     * Prompts the seller to add a single item to the marketplace.
+     */
+    private void addSingleItem() {
+      Scanner input = new Scanner(System.in);
+      System.out.print("\nEnter the name of the item to add: ");
+      String itemName = input.nextLine();
+      while (itemName.equals("")) {
+        System.out.println("\nInvalid input. An item must have a name.\n");
+        System.out.print("Enter a name for the item: ");
+        itemName = input.nextLine();
+      }
+      System.out.print("Enter a description of the item: ");
+      String description = input.nextLine();
+      while (description.equals("")) {
+        System.out.println("\nInvalid input. An item must have a description.\n");
+        System.out.print("Enter a description for the item: ");
+        description = input.nextLine();
+      }
+      System.out.print("Enter the price of the item: ");
+      String price = input.nextLine();
+      while (price.equals("")) {
+        System.out.println("\nInvalid input. An item must have a price.\n");
+        System.out.print("Enter a price: ");
+        price = input.nextLine();
+      }
+      System.out.print("Enter the quantity available: ");
+        int quantity = 0;
+        while (true) {
+          if (!input.hasNextInt()) {
+            input.nextLine();
+            System.out.print("\nThe quantity must be a number. ");
+          } else {
+            quantity = input.nextInt();
+            if (quantity > 0) {
+              break;
+            } else {
+              System.out.print("\nThe quantity must be greater than zero. ");
+            }
+          }
+          System.out.print("Enter in a new number: ");
+        }
+        System.out.println("\nChoose one of the categories below " +
+                            "to add the item to.");
+        System.out.println("\nCategories\n----------");
+        String category = selectACategory();
+        items.add(new Item(itemName, description, price, generateItemID(),
+                           currentUser, quantity, category));
+        System.out.println("\nThe item was added to the marketplace.");
+        input.close();
+    }
+    
+    /**
+     * Prompts the seller to add items to the marketplace from a file.
+     */
+    private void addItemsFromFile() {
+      Scanner input = new Scanner(System.in);
+      System.out.print("\nEnter the path of the file: ");
+      Scanner fileScanner;
+      try {
+      fileScanner = new Scanner(new File(input.nextLine()));
+      }
+      catch (FileNotFoundException e) {
+        System.out.println("\nNo file was found.");
+        return;
+      }
+      while (fileScanner.hasNextLine() && fileScanner.nextLine().equals("%")) {
+        Item temp = new Item();
+        temp.setName(fileScanner.nextLine());
+        temp.setID(Integer.parseInt(fileScanner.nextLine()));
+        temp.setDescription(fileScanner.nextLine());
+        temp.setSellerID(Integer.parseInt(fileScanner.nextLine()));
+        temp.setPrice(fileScanner.nextLine());
+        temp.setQuantity(Integer.parseInt(fileScanner.nextLine()));
+        temp.setCategory(fileScanner.nextLine());
+        items.add(temp);
+      }
+      input.close();
+      System.out.println("\nThe items were added to the marketplace.");
+    }
+    
+    /**
+     * Displays a list of items from the current seller, then prompts the seller
+     * to remove one of the items from the marketplace.
+     */ 
+    private void removeItemMenu() {
+      Seller seller = searchSellersByID(currentUser);
+      ArrayList<Item> itemList = searchItemsBySeller(seller);
+      if (itemList.isEmpty()) {
+        System.out.println("\nYou have no items to remove.\n");
+        return;
+      }
+      Scanner input = new Scanner(System.in);
+      System.out.println("\nYour items");
+      System.out.println("----------");
+      printItems(itemList);
+      Item item = selectAnItem(itemList);
+      items.remove(item);
+      System.out.println("\nThe item was successfully removed\n");
+      input.close();
+    }
+    
+    /**
+     * Displays a list of items from the seller with the given seller id, then
+     * prompts the user to select and update an item.
+     * @param sellerID a seller id
+     */ 
+    private void updateItemInfo(int sellerID) {
+      Seller seller = searchSellersByID(sellerID);
+      ArrayList<Item> itemList = searchItemsBySeller(seller);
+      if (itemList.isEmpty()) {
+        System.out.println("\nThere are no items to update.\n");
+        return;
+      }
+      Scanner input = new Scanner(System.in);
+      System.out.println("\nItems");
+      System.out.println("------");
+      printItems(itemList);
+      Item item = selectAnItem(itemList);
+      while (true) {
+        System.out.println("\nSelect the attribute that you wish to update.");
+        System.out.println("1. name");
+        System.out.println("2. description");
+        System.out.println("3. price");
+        System.out.println("4. quantity");
+        System.out.println("5. category");
+        System.out.print("\nEnter the number of the desired option: ");
+        if (input.hasNextInt()) {
+          switch (input.nextInt()) {
+            case 1:
+              input.nextLine();
+              System.out.println("\nCurrent item name: " + item.getName());
+              System.out.print("Enter new item name: ");
+              item.setName(input.nextLine());
+              System.out.println("\nThe item has been updated.\n");
+              return;
+            case 2:
+              input.nextLine();
+              System.out.println("\nCurrent item description: " + item.getDescription());
+              System.out.print("Enter new item description: ");
+              item.setDescription(input.nextLine());
+              System.out.println("\nThe item has been updated.\n");
+              return;
+            case 3:
+              input.nextLine();
+              System.out.println("\nCurrent item price: " + item.getPrice());
+              System.out.print("Enter new item price: ");
+              item.setPrice(input.nextLine());
+              System.out.println("\nThe item has been updated.\n");
+              return;
+            case 4:
+              input.nextLine();
+              System.out.println("\nCurrent item quantity: " + item.getQuantity());
+              System.out.print("Enter new quantity: ");
+              item.setQuantity(input.nextInt());
+              System.out.println("\nThe item has been updated.\n");
+              return;
+            case 5:
+              input.nextLine();
+              System.out.println("\nCurrent item category: " + item.getCategory());
+              System.out.println("Choose one of the following categories.");
+              String category = selectACategory();
+              item.setCategory(category);
+              System.out.println("\nThe item has been updated.\n");
+              return;
+            default:
+              input.nextLine();
+              System.out.println("\ninvalid input");
+          }
+        } else {
+          input.nextLine();
+          System.out.println("\ninvalid input");
+        }
+      }
+    }
   
   /**
    * Displays a list of all the orders that were made by the buyer with the
@@ -786,7 +1361,7 @@ private int getUserID(String emailAddress, String password) {
       }
     }
     if (noOrdersMade) {
-      System.out.println("You have not made any orders.\n");
+      System.out.println("No orders have been made.\n");
     }
   }
   
@@ -831,20 +1406,18 @@ private int getUserID(String emailAddress, String password) {
    */ 
   private void browseItemsMenu() {
     System.out.println("\nBrowse Items");
-    System.out.println("--------------");
+    System.out.println("------------");
     if (categories.size() == 0) {
       System.out.println("Sorry. No categories.\n");
       return;
     }
-    int count = 1;
-    for (String s : categories) {
-      System.out.println(count + ". " + s);
-      count++;
-    }
     String category = selectACategory();
     ArrayList<Item> itemList = searchItemsByCategory(category);
     System.out.println("\n" + category);
-    System.out.println("--------");
+    for (int i = 0; i < category.length(); i++) {
+      System.out.print("-");
+    }
+    System.out.println();
     printItems(itemList);
     Item item = selectAnItem(itemList);
     System.out.println();
@@ -858,12 +1431,18 @@ private int getUserID(String emailAddress, String password) {
    * @return the selected category
    */ 
   private String selectACategory() {
+    int count = 1;
     Scanner input = new Scanner(System.in);
+    for (String s : categories) {
+      System.out.println(count + ". " + s);
+      count++;
+    }
     while (true) {
       System.out.print("\nSelect a category: ");
       if (input.hasNextInt()) {
         int choice = input.nextInt();
         if (choice < 0 || choice > categories.size()) {
+          input.nextLine();
           System.out.println("\nThe numbered you entered is out of range.");
         } else {
           input.close();
@@ -877,8 +1456,9 @@ private int getUserID(String emailAddress, String password) {
   }
   
   /**
-   * Displays the given list of items, and prompts the user to select an item
-   * from the list. The selected item is then returned.
+   * Prompts the user to select an item from the list. The selected item is then
+   * returned. Note: the list is not displayed. You must display the list prior 
+   * to calling this method.
    * @return the selected item from the list
    */ 
   private Item selectAnItem(ArrayList<Item> itemList) {
@@ -888,6 +1468,7 @@ private int getUserID(String emailAddress, String password) {
       if (input.hasNextInt()) {
         int choice = input.nextInt();
         if (choice < 0 || choice > itemList.size()) {
+          input.nextLine();
           System.out.println("\nThe numbered you entered is out of range.");
         } else {
           input.close();
@@ -901,6 +1482,59 @@ private int getUserID(String emailAddress, String password) {
   }
   
   /**
+   * Prompts the user to select an order from the list. The selected order is
+   * then returned. Note: the list is not displayed. You must display
+   * the list prior to calling this method.
+   * @return the selected order from the list
+   */ 
+  private Order selectAnOrder(ArrayList<Order> orderList) {
+    Scanner input = new Scanner(System.in);
+    while (true) {
+      System.out.print("Select an order: ");
+      if (input.hasNextInt()) {
+        int choice = input.nextInt();
+        if (choice < 0 || choice > orderList.size()) {
+          input.nextLine();
+          System.out.println("\nThe numbered you entered is out of range.\n");
+        } else {
+          input.close();
+          return orderList.get(choice - 1);
+        }
+      } else {
+        input.nextLine();
+        System.out.println("\nInvalid input.\n");
+      }
+    }
+  }
+  
+  /**
+   * Prompts the user to select an element from the given list. The selected 
+   * element is then returned. Note: the list is not displayed. You must display
+   * the list prior to calling this method.
+   * @return the selected element from the list
+   */ 
+  private <T> T selectFromList(ArrayList<T> aList) {
+    Scanner input = new Scanner(System.in);
+    while (true) {
+      System.out.print("\nMake a selection: ");
+      if (input.hasNextInt()) {
+        int choice = input.nextInt();
+        if (choice < 0 || choice > aList.size()) {
+          input.nextLine();
+          System.out.println("\nThe numbered you entered is out of range.");
+        } else {
+          input.close();
+          return aList.get(choice - 1);
+        }
+      } else {
+        input.nextLine();
+        System.out.println("\nInvalid input.");
+      }
+    }
+  }
+  
+  
+  /**
    * Prints out the names of the items in the given list. Each item name is
    * placed on its own line.
    * @param itemList the items to print
@@ -912,9 +1546,53 @@ private int getUserID(String emailAddress, String password) {
       count++;
     }
   }
-    
-    
   
+  /**
+   * Prints out the names of the Sellers in the given list. Each seller name is
+   * placed on its own line.
+   * @param sellerList the sellers to print
+   */ 
+  public void printSellers(ArrayList<Seller> sellerList) {
+    int count = 1;
+    for (Seller s : sellerList) {
+      System.out.printf("%d. %-35s ID: %s\n", count, s.getName(), s.getID());
+      count++;
+    }
+  }
+  
+  /**
+   * Prints out the names of the buyers in the given list. Each buyer name is
+   * placed on its own line.
+   * @param buyerList the buyers to print
+   */ 
+  public void printBuyers(ArrayList<Buyer> buyerList) {
+    int count = 1;
+    for (Buyer s : buyerList) {
+      System.out.printf("%d. %-35s ID: %s\n", count, s.getName(), s.getID());
+      count++;
+    }
+  }
+  
+  /**
+   * Prints out the names of the orders in the given list. Each order name is
+   * placed on its own line.
+   * @param orderList the orders to print
+   */ 
+  public void printOrders(ArrayList<Order> orderList) {
+    int count = 1;
+    for (Order o : orderList) {
+      System.out.println(count + ". Order ID: " + o.getID());
+      Item item = searchItemsByID(o.getItemID());
+      Buyer buyer = searchBuyersByID(o.getBuyerID());
+      System.out.println("   Item : " + item.getName());
+      System.out.println("   Buyer : " + buyer.getName());
+      String status = (o.getShipped()) ? "Shipped" : "Processing";      
+      System.out.println("   Status : " + status);
+      System.out.println();
+      count++;
+    }
+  }
+    
   /**
    * Displays a menu that allows a user to search for items by keyword.
    */ 
@@ -938,6 +1616,7 @@ private int getUserID(String emailAddress, String password) {
         if (input.hasNextInt()) {
            int choice = input.nextInt();
            if (choice > results.size() || choice <= 0) {
+             input.nextLine();
              System.out.println("\nThe number you entered is out of range");
            } else {
              System.out.println();
@@ -945,6 +1624,7 @@ private int getUserID(String emailAddress, String password) {
              break;
            }
         } else {
+          input.nextLine();
           System.out.println("\ninvalid input");
         }
       }
@@ -965,6 +1645,7 @@ private int getUserID(String emailAddress, String password) {
         int itemID = input.nextInt();
         if (itemID > 39999 || itemID < 30000) {
           System.out.println("\nThe item id is out of range.");
+          input.nextLine();
         } else {
           Item item = searchItemsByID(itemID);
           if (item == null) {
@@ -983,6 +1664,7 @@ private int getUserID(String emailAddress, String password) {
     }
     input.close();
   }
+ 
   
 
   /**
@@ -1027,6 +1709,7 @@ private int getUserID(String emailAddress, String password) {
             System.out.println();
             break;
           } else {
+            input.nextLine();
             System.out.println("\nInvalid input");
           }
         } else {
@@ -1039,11 +1722,12 @@ private int getUserID(String emailAddress, String password) {
   }
   
   /**
-   * Change account information
+   * Changes account information for the buyer with the given buyer id.
+   * @param buyerID a buyer id
    */ 
-  private void changeBuyerAccountInfo() {
+  private void changeBuyerAccountInfo(int buyerID) {
     Scanner input = new Scanner(System.in);    
-    Buyer buyer = searchBuyersByID(currentUser);
+    Buyer buyer = searchBuyersByID(buyerID);
     boolean dontExitMenu = true;
     while (dontExitMenu) {
       System.out.println("\nChange Buyer Account Information");
@@ -1091,32 +1775,67 @@ private int getUserID(String emailAddress, String password) {
   }
   
   /**
-   * Returns true if the current user is a buyer.
-   * @return true if the current user is a buyer
+   * Changes account information for the seller with the given seller id.
+   * @param sellerID a seller id
    */ 
-  private boolean isCurrentUserABuyer() {
-    return (currentUser >= 10000 && currentUser <= 19999);
+  private void changeSellerAccountInfo(int sellerID) {
+    Scanner input = new Scanner(System.in);
+    Seller seller = searchSellersByID(sellerID);
+    boolean dontExitMenu = true;
+    while (dontExitMenu) {
+      System.out.println("\nChange Seller Account Information");
+      System.out.println("---------------------------------");
+      System.out.println("1. Change name");
+      System.out.println("2. Change e-mail address");
+      System.out.println("3. Change password");
+      System.out.println("4. Return to the previous menu");
+      System.out.print("\nEnter the number of the desired option: ");
+      if (input.hasNextInt()) {
+        switch (input.nextInt()) {
+          case 1:
+            System.out.print("\nCurrent Name: " + seller.getName());
+            System.out.print("\nEnter new name: ");
+            input.nextLine();
+            seller.setName(input.nextLine());
+            System.out.println("\nName was successfully changed.");
+            break;
+          case 2:
+            System.out.print("\nCurrent e-mail address: " + seller.getEmailAddress());
+            System.out.print("\nEnter new e-mail address: ");
+            input.nextLine();
+            seller.setEmailAddress(input.nextLine());
+            System.out.println("\nE-mail address was successfully changed.");
+            break;
+          case 3:
+            System.out.print("\nEnter new password: ");
+            input.nextLine();
+            seller.setPassword(input.nextLine());
+            System.out.println("\nPassword was successfully changed.");
+            break;
+          case 4:
+            dontExitMenu = false;
+            break;
+          default:
+            input.nextLine();
+            System.out.println("\ninvalid input");
+        }
+      } else {
+        input.nextLine();
+        System.out.println("\ninvalid input");
+      }
+    }
+    System.out.println();
   }
   
   /**
-   * Returns true if the current user is a seller.
-   * @return true if the current user is a seller
+   * Runs the marketplace program.
    */ 
-  private boolean isCurrentUserASeller() {
-    return (currentUser >= 20000 && currentUser <= 29999);
+  public void run() throws FileNotFoundException {
+    mainMenu();
   }
-  
-  /**
-   * Returns true if the current user is an admin.
-   * @return true if the current user is an admin
-   */ 
-  private boolean isCurrentUserAnAdmin() {
-    return (currentUser == -2);
-  }
-  
  
   public static void main(String[] args) throws FileNotFoundException {
-    Marketplace test = new Marketplace();
-    test.mainMenu();
+    Marketplace marketplace = new Marketplace();
+    marketplace.run();
   }
 }
