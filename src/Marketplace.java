@@ -199,7 +199,7 @@ public class Marketplace {
       temp.setPassword(input.nextLine());
       buyers.add(temp);
     }
-    input.close();
+    //input.close();
   }
   
   /**
@@ -216,7 +216,7 @@ public class Marketplace {
       temp.setPassword(input.nextLine());
       sellers.add(temp);
     }
-    input.close();
+    //input.close();
   }
   
   /**
@@ -228,7 +228,7 @@ public class Marketplace {
     while (input.hasNextLine() && input.nextLine().equals("%")) {
       categories.add(input.nextLine());
     }
-    input.close();
+    //input.close();
   }
   
   /**
@@ -248,7 +248,7 @@ public class Marketplace {
       temp.setCategory(input.nextLine());
       items.add(temp);
     }
-    input.close();
+    //input.close();
   }
   
   /**
@@ -279,7 +279,7 @@ public class Marketplace {
       temp.setShippingDate(shippingDate);
       orders.add(temp);
     }
-    input.close();
+    //input.close();
   }
   
   /**
@@ -567,7 +567,7 @@ public class Marketplace {
         System.out.println("\nInvalid input\n");
       }
     }
-    input.close();
+    //input.close();
   }  
    
   /**
@@ -595,14 +595,14 @@ public class Marketplace {
             break;
           } else if (choice.equals("n")) {
             System.out.println();
-            input.close();
+            //input.close();
             return;
           }
           System.out.println();
         }
       }
     }
-    input.close();
+    //input.close();
     currentUser = id;
     if (id == -2) {
       System.out.println();
@@ -703,7 +703,7 @@ private int getUserID(String emailAddress, String password) {
       System.out.println();
       sellerMenu();
     }
-    input.close();
+    //input.close();
   }
   
   /**
@@ -795,19 +795,19 @@ private int getUserID(String emailAddress, String password) {
         switch (input.nextInt()) {
           case 1:
             displayOrders(1);
-            input.close();
+            //input.close();
             return;
           case 2:
             displayOrders(30);
-            input.close();
+            //input.close();
             return;
           case 3:
             displayOrders(365);
-            input.close();
+            //input.close();
             return;
           case 4:
             displayOrders(10000);
-            input.close();
+            //input.close();
             return;
           default:
             input.nextLine();
@@ -874,7 +874,7 @@ private int getUserID(String emailAddress, String password) {
             updateOrderStatus(seller.getID());
             break;
           case 4:
-            input.close();
+            //input.close();
             System.out.println();
             return;
           default:
@@ -915,7 +915,7 @@ private int getUserID(String emailAddress, String password) {
             buyerOrderHistory(buyer.getID());
             break;
           case 3:
-            input.close();
+            //input.close();
             System.out.println();
             return;
           default:
@@ -986,7 +986,7 @@ private int getUserID(String emailAddress, String password) {
             changeBuyerAccountInfo(currentUser);
             break;
           case 5:
-            input.close();
+            //input.close();
             System.out.println();
             return;
           default:
@@ -1075,7 +1075,7 @@ private int getUserID(String emailAddress, String password) {
             changeSellerAccountInfo(currentUser);
             break;
           case 6:
-            input.close();
+            //input.close();
             System.out.println();
             return;
           default:
@@ -1107,7 +1107,7 @@ private int getUserID(String emailAddress, String password) {
     Order order = selectAnOrder(orderList);
     if (order.getShipped()) {
       System.out.println("\nThe order has already been shipped.\n");
-      input.close();
+      //input.close();
       return;
     }
     System.out.print("Change order status to shipped? Enter y or n: ");
@@ -1122,7 +1122,7 @@ private int getUserID(String emailAddress, String password) {
       System.out.println("\nThe order status was successfully updated");
     }
     System.out.println();
-    input.close();
+    //input.close();
     return;
   }
   
@@ -1149,7 +1149,7 @@ private int getUserID(String emailAddress, String password) {
               addItemsFromFile();
               break;
             case 3:
-              input.close();
+              //input.close();
               System.out.println();
               return;
             default:
@@ -1212,7 +1212,7 @@ private int getUserID(String emailAddress, String password) {
         items.add(new Item(itemName, description, price, generateItemID(),
                            currentUser, quantity, category));
         System.out.println("\nThe item was added to the marketplace.");
-        input.close();
+        //input.close();
     }
     
     /**
@@ -1240,7 +1240,7 @@ private int getUserID(String emailAddress, String password) {
         temp.setCategory(fileScanner.nextLine());
         items.add(temp);
       }
-      input.close();
+      //input.close();
       System.out.println("\nThe items were added to the marketplace.");
     }
     
@@ -1262,7 +1262,7 @@ private int getUserID(String emailAddress, String password) {
       Item item = selectAnItem(itemList);
       items.remove(item);
       System.out.println("\nThe item was successfully removed\n");
-      input.close();
+      //input.close();
     }
     
     /**
@@ -1388,7 +1388,7 @@ private int getUserID(String emailAddress, String password) {
             break;
           case 3:
             System.out.println();
-            input.close();
+            //input.close();
             return;
           default:
             input.nextLine();
@@ -1445,7 +1445,7 @@ private int getUserID(String emailAddress, String password) {
           input.nextLine();
           System.out.println("\nThe numbered you entered is out of range.");
         } else {
-          input.close();
+          //input.close();
           return categories.get(choice - 1);
         }
       } else {
@@ -1471,7 +1471,7 @@ private int getUserID(String emailAddress, String password) {
           input.nextLine();
           System.out.println("\nThe numbered you entered is out of range.");
         } else {
-          input.close();
+          //input.close();
           return itemList.get(choice - 1);
         }
       } else {
@@ -1497,7 +1497,7 @@ private int getUserID(String emailAddress, String password) {
           input.nextLine();
           System.out.println("\nThe numbered you entered is out of range.\n");
         } else {
-          input.close();
+          //input.close();
           return orderList.get(choice - 1);
         }
       } else {
@@ -1523,7 +1523,7 @@ private int getUserID(String emailAddress, String password) {
           input.nextLine();
           System.out.println("\nThe numbered you entered is out of range.");
         } else {
-          input.close();
+          //input.close();
           return aList.get(choice - 1);
         }
       } else {
@@ -1629,7 +1629,7 @@ private int getUserID(String emailAddress, String password) {
         }
       }
     }
-    input.close();
+    //input.close();
   }
   
   /**
@@ -1662,7 +1662,7 @@ private int getUserID(String emailAddress, String password) {
         System.out.println("\nInvalid input");
       }
     }
-    input.close();
+    //input.close();
   }
  
   
@@ -1718,7 +1718,7 @@ private int getUserID(String emailAddress, String password) {
         }
       }
     }
-    input.close();
+    //input.close();
   }
   
   /**
