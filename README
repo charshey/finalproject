@@ -1,0 +1,30 @@
+To run the program, compile and run the Marketplace class’s main method. Alternatively, you can create a new instance of the marketplace class, and call the run() method. Ex:
+
+	new Marketplace.run();
+
+The program requires the following six text files to run:
+
+	buyers
+	sellers
+	admin
+	orders
+	items
+	categories
+
+These text files, which contain data from past runs of the Marketplace, are located in a folder called “data”. This folder must be placed adjacent to the folder containing the source code. For example, if the source code is located in a folder called “src” with the path “c:\project\src\”, then the path of the data folder should be “c:\project\data\”. 
+
+Templates for these program files are located in an adjacent folder "templates"; javadoc documentation is located in "javadoc"; and "documentation" contains our project report, UML diagram, and program screenshots. 
+
+To login as the administrator, go to the login menu, and type “admin” (without the quotes) for the e-mail address. Then type admin again for the password.
+
+To login as a buyer or seller, you can do one of two things: 1. create either a buyer or seller account, which will then automatically log you in. 2. Use one of the already created login credentials located in the buyers.txt or sellers.txt.
+
+For your convenience, here is one of the buyer credentials:
+
+	Email:		SHenderson@iub.edu
+	Password:	catz
+
+And here is one of the seller credentials:
+
+	Email:		bob@bobsBookstore.net
+	Password:	Asparagus333

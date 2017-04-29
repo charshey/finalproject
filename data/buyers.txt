@@ -23,8 +23,3 @@ Michael Smith
 10004
 MikeSmith@aol.com
 oranges16
-%
-Clare Harshey
-19986
-charshey@indiana.edu
-test

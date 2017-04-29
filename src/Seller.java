@@ -111,10 +111,4 @@ public class Seller {
   public void setPassword(String password) {
     this.password = password;
   }
-  
-  /**
-   * Sells an item to a buyer.
-   */ 
-  public void sell() {
-  }
 }

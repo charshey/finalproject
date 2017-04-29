@@ -4,7 +4,23 @@ Java for Dummies
 A guide to learning Java.
 25000
 15.87
-17
+15
+Books
+%
+The Grapes of Wrath
+30001
+John Steinbeck
+25000
+7.86
+5
+Books
+%
+The Adventures of Tom Sawyer
+30004
+Mark Twain
+25000
+9.43
+0
 Books
 %
 Green eggs and Ham
@@ -20,7 +36,7 @@ The Cat in the Hat
 A book about a cat.
 20611
 15.87
-12
+11
 Books
 %
 Back to the Future
@@ -28,7 +44,7 @@ Back to the Future
 A movie about a kid and a scientist.
 22478
 8.99
-0
+5
 Movies
 %
 Forrest Gump
@@ -63,34 +79,50 @@ Tasty candy in bear form.
 28
 Grocery
 %
-The Hitchhiker's Guide to the Galaxy
-32886
-A classic sci-fi comedy.
-29484
-5.99
-20
-Books
+Canned Tomatoes
+30020
+Produced in Italy.
+29105
+2.55
+0
+Grocery
 %
-Teacup Pigs 2017 Calendar
-32381
-A calendar full of cute pigs.
-29484
-7.89
-34
-Office Supplies
+Canned Green Beans
+39293
+French style green beans.
+29105
+1.99
+184
+Grocery
 %
-No, don't chew that!: A training manual for new dog owners
-31561
-An essential for any puppy parent.
-29484
-11.99
-8
-Books
+Leather Jacket
+33655
+Made from genuine leather.
+25671
+150.00
+2
+Clothing
 %
-All Your Favorite Bands
-33010
-Rock album by Dawes.
-29484
-21.35
-12
-Vinyl
+Levi's Jeans
+31890
+Dark blue. Imported from China.
+25671
+49.99
+4
+Clothing
+%
+Summer T-shirt
+38263
+Soft ringspun cotton. Orange.
+25671
+8.79
+21
+Clothing
+%
+Rain Boots
+30904
+Black rubber.
+25671
+29.45
+0
+Clothing

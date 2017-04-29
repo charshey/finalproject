@@ -70,6 +70,7 @@ public class Marketplace {
     writeCategories();
     writeItems();
     writeAdmin();
+    writeOrders();
   }
   
   /**
@@ -199,7 +200,6 @@ public class Marketplace {
       temp.setPassword(input.nextLine());
       buyers.add(temp);
     }
-    //input.close();
   }
   
   /**
@@ -216,7 +216,6 @@ public class Marketplace {
       temp.setPassword(input.nextLine());
       sellers.add(temp);
     }
-    //input.close();
   }
   
   /**
@@ -228,7 +227,6 @@ public class Marketplace {
     while (input.hasNextLine() && input.nextLine().equals("%")) {
       categories.add(input.nextLine());
     }
-    //input.close();
   }
   
   /**
@@ -248,7 +246,6 @@ public class Marketplace {
       temp.setCategory(input.nextLine());
       items.add(temp);
     }
-    //input.close();
   }
   
   /**
@@ -279,7 +276,6 @@ public class Marketplace {
       temp.setShippingDate(shippingDate);
       orders.add(temp);
     }
-    //input.close();
   }
   
   /**
@@ -477,29 +473,6 @@ public class Marketplace {
   }
   
   /**
-   * Returns all of the orders made between the given beginning date-time and
-   * the ending date-time.
-   * @param beginning the beginning date-time
-   * @param ending the ending date-time
-   * @return the orders made between the beginning date-time and ending date-time
-   */ 
-  public ArrayList<Order> getOrdersBetweenDates(LocalDateTime beginning,
-                                                LocalDateTime ending) {
-    if (ending.isAfter(beginning)) {
-      throw new IllegalArgumentException("beginning date-time is after " +
-                                         "ending date-time");
-    }
-    ArrayList<Order> matchingOrders = new ArrayList<Order>();
-    for (Order o : orders) {
-      LocalDateTime dateAndTime = o.getDateAndTime();
-      if (dateAndTime.isAfter(beginning) && dateAndTime.isAfter(ending)) {
-        matchingOrders.add(o);
-      }
-    }
-    return matchingOrders;
-  }
-  
-  /**
    * Returns a unique buyer id number.
    * @return a unique buyer id number
    */ 
@@ -582,7 +555,6 @@ public class Marketplace {
         System.out.println("\nInvalid input\n");
       }
     }
-    //input.close();
   }  
    
   /**
@@ -610,14 +582,12 @@ public class Marketplace {
             break;
           } else if (choice.equals("n")) {
             System.out.println();
-            //input.close();
             return;
           }
           System.out.println();
         }
       }
     }
-    //input.close();
     currentUser = id;
     if (id == -2) {
       System.out.println();
@@ -718,7 +688,6 @@ private int getUserID(String emailAddress, String password) {
       System.out.println();
       sellerMenu();
     }
-    //input.close();
   }
   
   /**
@@ -779,7 +748,6 @@ private int getUserID(String emailAddress, String password) {
             showSalesHistoryMenu();
             break;
           case 6:
-            //input.close();
             System.out.println();
             return;
           default:
@@ -810,11 +778,9 @@ private int getUserID(String emailAddress, String password) {
         switch (input.nextInt()) {
           case 1:
             displayOrders(1);
-            //input.close();
             return;
           case 2:
             displayOrders(30);
-            //input.close();
             return;
           case 3:
             displayOrders(365);
@@ -822,7 +788,6 @@ private int getUserID(String emailAddress, String password) {
             return;
           case 4:
             displayOrders(10000);
-            //input.close();
             return;
           default:
             input.nextLine();
@@ -889,7 +854,6 @@ private int getUserID(String emailAddress, String password) {
             updateOrderStatus(seller.getID());
             break;
           case 4:
-            //input.close();
             System.out.println();
             return;
           default:
@@ -930,7 +894,6 @@ private int getUserID(String emailAddress, String password) {
             buyerOrderHistory(buyer.getID());
             break;
           case 3:
-            //input.close();
             System.out.println();
             return;
           default:
@@ -978,8 +941,7 @@ private int getUserID(String emailAddress, String password) {
     System.out.println("Hello, " + searchBuyersByID(currentUser).getName() + "!");
     displayShippedItems();
     while (true) {
-      
-      System.out.println("----------");
+      System.out.println("--------------");
       System.out.println("1. Search for items");
       System.out.println("2. Browse for items");
       System.out.println("3. See order history");
@@ -1002,7 +964,6 @@ private int getUserID(String emailAddress, String password) {
             changeBuyerAccountInfo(currentUser);
             break;
           case 5:
-            //input.close();
             System.out.println();
             return;
           default:
@@ -1059,14 +1020,14 @@ private int getUserID(String emailAddress, String password) {
    if(checkOutOfStock(searchSellersByID(currentUser)).size() > 0){
      System.out.println("The following items in your inventory are out of stock:");
      for(Item i : checkOutOfStock(searchSellersByID(currentUser))){
-	  System.out.println(i.getID() + ": " + i.getName());
+   System.out.println(i.getID() + ": " + i.getName());
      }
      System.out.println();
    }
    if(checkUnshippedOrders(searchSellersByID(currentUser)).size() > 0){
      System.out.println("The following orders are waiting to be shipped:");
      for(Order o : checkUnshippedOrders(searchSellersByID(currentUser))){
-	  System.out.println("Order #" + o.getID());
+   System.out.println("Order #" + o.getID());
      }
      System.out.println();
    }
@@ -1098,7 +1059,6 @@ private int getUserID(String emailAddress, String password) {
             changeSellerAccountInfo(currentUser);
             break;
           case 6:
-            //input.close();
             System.out.println();
             return;
           default:
@@ -1130,7 +1090,6 @@ private int getUserID(String emailAddress, String password) {
     Order order = selectAnOrder(orderList);
     if (order.getShipped()) {
       System.out.println("\nThe order has already been shipped.\n");
-      //input.close();
       return;
     }
     System.out.print("Change order status to shipped? Enter y or n: ");
@@ -1145,7 +1104,6 @@ private int getUserID(String emailAddress, String password) {
       System.out.println("\nThe order status was successfully updated");
     }
     System.out.println();
-    //input.close();
     return;
   }
   
@@ -1172,7 +1130,6 @@ private int getUserID(String emailAddress, String password) {
               addItemsFromFile();
               break;
             case 3:
-              //input.close();
               System.out.println();
               return;
             default:
@@ -1235,7 +1192,6 @@ private int getUserID(String emailAddress, String password) {
         items.add(new Item(itemName, description, price, generateItemID(),
                            currentUser, quantity, category));
         System.out.println("\nThe item was added to the marketplace.");
-        //input.close();
     }
     
     /**
@@ -1263,7 +1219,6 @@ private int getUserID(String emailAddress, String password) {
         temp.setCategory(fileScanner.nextLine());
         items.add(temp);
       }
-      //input.close();
       System.out.println("\nThe items were added to the marketplace.");
     }
     
@@ -1285,7 +1240,6 @@ private int getUserID(String emailAddress, String password) {
       Item item = selectAnItem(itemList);
       items.remove(item);
       System.out.println("\nThe item was successfully removed\n");
-      //input.close();
     }
     
     /**
@@ -1411,7 +1365,6 @@ private int getUserID(String emailAddress, String password) {
             break;
           case 3:
             System.out.println();
-            //input.close();
             return;
           default:
             input.nextLine();
@@ -1442,14 +1395,14 @@ private int getUserID(String emailAddress, String password) {
     }
     System.out.println();
     if(itemList.size() > 0){
-	printItems(itemList);
-    	Item item = selectAnItem(itemList);
-    	System.out.println();
-    	itemPage(item);
+ printItems(itemList);
+     Item item = selectAnItem(itemList);
+     System.out.println();
+     itemPage(item);
     }
     else{
-	System.out.println("Sorry, there are no items in this category yet.\n");
-	buyerMenu();
+ System.out.println("Sorry, there are no items in this category yet.\n");
+ buyerMenu();
     }
   }
   
@@ -1474,7 +1427,6 @@ private int getUserID(String emailAddress, String password) {
           input.nextLine();
           System.out.println("\nThe numbered you entered is out of range.");
         } else {
-          //input.close();
           return categories.get(choice - 1);
         }
       } else {
@@ -1500,7 +1452,6 @@ private int getUserID(String emailAddress, String password) {
           input.nextLine();
           System.out.println("\nThe numbered you entered is out of range.");
         } else {
-          //input.close();
           return itemList.get(choice - 1);
         }
       } else {
@@ -1526,7 +1477,6 @@ private int getUserID(String emailAddress, String password) {
           input.nextLine();
           System.out.println("\nThe numbered you entered is out of range.\n");
         } else {
-          //input.close();
           return orderList.get(choice - 1);
         }
       } else {
@@ -1552,7 +1502,6 @@ private int getUserID(String emailAddress, String password) {
           input.nextLine();
           System.out.println("\nThe numbered you entered is out of range.");
         } else {
-          //input.close();
           return aList.get(choice - 1);
         }
       } else {
@@ -1568,7 +1517,7 @@ private int getUserID(String emailAddress, String password) {
    * placed on its own line.
    * @param itemList the items to print
    */ 
-  public void printItems(ArrayList<Item> itemList) {
+  private void printItems(ArrayList<Item> itemList) {
     int count = 1;
     for (Item e : itemList) {
       System.out.println(count + ". " + e.getName());
@@ -1581,7 +1530,7 @@ private int getUserID(String emailAddress, String password) {
    * placed on its own line.
    * @param sellerList the sellers to print
    */ 
-  public void printSellers(ArrayList<Seller> sellerList) {
+  private void printSellers(ArrayList<Seller> sellerList) {
     int count = 1;
     for (Seller s : sellerList) {
       System.out.printf("%d. %-35s ID: %s\n", count, s.getName(), s.getID());
@@ -1594,7 +1543,7 @@ private int getUserID(String emailAddress, String password) {
    * placed on its own line.
    * @param buyerList the buyers to print
    */ 
-  public void printBuyers(ArrayList<Buyer> buyerList) {
+  private void printBuyers(ArrayList<Buyer> buyerList) {
     int count = 1;
     for (Buyer s : buyerList) {
       System.out.printf("%d. %-35s ID: %s\n", count, s.getName(), s.getID());
@@ -1607,7 +1556,7 @@ private int getUserID(String emailAddress, String password) {
    * placed on its own line.
    * @param orderList the orders to print
    */ 
-  public void printOrders(ArrayList<Order> orderList) {
+  private void printOrders(ArrayList<Order> orderList) {
     int count = 1;
     for (Order o : orderList) {
       System.out.println(count + ". Order ID: " + o.getID());
@@ -1658,7 +1607,6 @@ private int getUserID(String emailAddress, String password) {
         }
       }
     }
-    //input.close();
   }
   
   /**
@@ -1691,7 +1639,6 @@ private int getUserID(String emailAddress, String password) {
         System.out.println("\nInvalid input");
       }
     }
-    //input.close();
   }
  
   
@@ -1747,7 +1694,6 @@ private int getUserID(String emailAddress, String password) {
         }
       }
     }
-    //input.close();
   }
   
   /**

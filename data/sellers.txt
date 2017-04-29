@@ -19,7 +19,7 @@ Movie Club
 movieClub@gmail.com
 moviemoviemovie7
 %
-Half Price Books
-29484
-halfprice@books.com
-hpb2017
+The Clothing Emporium
+25671
+orders@clothingEmporium.com
+abc123
